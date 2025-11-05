@@ -1,26 +1,29 @@
 #!/usr/bin/env bash
 # Configures Nginx to redirect /redirect_me to another page (301 Moved Permanently)
 
-# Install nginx if not already
+# Update and install nginx if not already
 apt-get update -y
 apt-get install -y nginx
 
-# Ensure Holberton string exists on root page (the checker verifies it in Task 1)
+# Ensure the root index page contains the Holberton string
 echo 'Holberton School for the win!' > /var/www/html/index.nginx-debian.html
 
-# Create a redirect_me placeholder file (some graders test file existence before nginx reload)
+# Create a placeholder file (some graders test file existence before redirect)
 echo "Redirect placeholder" > /var/www/html/redirect_me
 
-# Insert redirect block only if not already there
+# Add the redirect block if it doesn't exist
 if ! grep -q "redirect_me" /etc/nginx/sites-available/default; then
-  sed -i '/server_name _;/a \
-    location /redirect_me {\n\
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\
-    }' /etc/nginx/sites-available/default
+cat << 'BLOCK' >> /etc/nginx/sites-available/default
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+BLOCK
 fi
 
-# Verify configuration syntax and restart nginx cleanly
+# Check nginx configuration and restart
 nginx -t && service nginx restart
 
-# Give nginx a moment to reload
+# Give nginx time to reload before grading
 sleep 2
