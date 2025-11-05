@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+        # Configures Nginx to redirect /redirect_me to YouTube
+
+        apt-get update -y
+        apt-get install -y nginx
+        echo 'Holberton School for the win!' > /var/www/html/index.nginx-debian.html
+
+        sed -i '/server_name _;/a \
+\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}\n' /etc/nginx/sites-available/default
+
+        service nginx restart
