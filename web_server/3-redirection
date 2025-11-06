@@ -1,29 +1,20 @@
 #!/usr/bin/env bash
 # Configures Nginx to redirect /redirect_me to another page (301 Moved Permanently)
 
-# Install nginx if not installed
 apt-get update -y
 apt-get install -y nginx
 
-# Update index page
 echo 'Holberton School for the win!' > /var/www/html/index.nginx-debian.html
 
-# Create a placeholder file
-echo "Redirect placeholder" > /var/www/html/redirect_me
-
-# Inject redirect block inside the default server configuration
-if ! grep -q "redirect_me" /etc/nginx/sites-available/default; then
-    sed -i '/server_name _;/a \\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}' /etc/nginx/sites-available/default
+# Add redirect block inside default site
+if ! grep -q "redirect_me" /etc/nginx/sites-enabled/default; then
+    sed -i '/server_name _;/a \\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}' /etc/nginx/sites-enabled/default
 fi
 
-# Verify nginx config
-nginx -t
+nginx -t && service nginx reload
+sleep 2
 
-# Restart nginx safely
-service nginx restart
-
-# Wait to ensure reload is complete
-sleep 3
-
-# Optional sanity check
-curl -sI 127.0.0.1/redirect_me | grep "301"
+echo "Testing localhost:"
+curl -sI localhost/redirect_me | head -n 1
+echo "Testing 127.0.0.1:"
+curl -sI 127.0.0.1/redirect_me | head -n 1
