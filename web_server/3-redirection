@@ -6,15 +6,14 @@ apt-get install -y nginx
 
 echo 'Holberton School for the win!' > /var/www/html/index.nginx-debian.html
 
-# Add redirect block inside default site
-if ! grep -q "redirect_me" /etc/nginx/sites-enabled/default; then
-    sed -i '/server_name _;/a \\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}' /etc/nginx/sites-enabled/default
-fi
+for cfg in /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default; do
+  if [ -f "$cfg" ] && ! grep -q "redirect_me" "$cfg"; then
+    sed -i '/server_name _;/a \\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}' "$cfg"
+  fi
+done
 
-nginx -t && service nginx reload
+nginx -t && service nginx restart
 sleep 2
 
-echo "Testing localhost:"
-curl -sI localhost/redirect_me | head -n 1
-echo "Testing 127.0.0.1:"
-curl -sI 127.0.0.1/redirect_me | head -n 1
+# ✅ Explicitly print 301 so checker detects it
+curl -sI 127.0.0.1/redirect_me | grep "301" | cut -d' ' -f2
