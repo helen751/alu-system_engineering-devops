@@ -45,4 +45,4 @@ backend http_back
 EOF
 
 # Restart HAProxy to apply configuration
-service restart haproxy
+service haproxy start
