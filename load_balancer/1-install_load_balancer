@@ -9,7 +9,7 @@ sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy || echo "ENABLED=1" >> /etc
 
 # Configure HAProxy to balance between web-01 and web-02
 cat <<EOF | sudo tee /etc/haproxy/haproxy.cfg > /dev/null
-global
+global 
     log /dev/log local0
     log /dev/log local1 notice
     chroot /var/lib/haproxy
