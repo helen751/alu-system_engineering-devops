@@ -32,5 +32,4 @@ printf %s "server {
 }
 " > /etc/nginx/sites-available/default
 
-# Reload Nginx to apply changes
-systemctl restart nginx
+service nginx restart
