@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Displays DNS A record information for domain/subdomain(s)
+
+domain=$1
+subdomain=$2
+
+get_info() {
+  local sub=$1
+  dig $sub.$domain | grep -A1 'ANSWER SECTION:' | awk '/IN/ {print "The subdomain " sub " is a "$4" record and points to "$5}' sub=$sub
+}
+
+if [ -z "$domain" ]; then
+  echo "Usage: $0 domain [subdomain]"
+  exit 1
+fi
+
+if [ -z "$subdomain" ]; then
+  for sub in www lb-01 web-01 web-02; do
+    get_info $sub
+  done
+else
+  get_info $subdomain
+fi
