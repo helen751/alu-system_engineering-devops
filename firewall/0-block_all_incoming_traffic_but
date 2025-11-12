@@ -16,6 +16,19 @@ ufw allow 22/tcp
 ufw allow 80/tcp
 ufw allow 443/tcp
 
+# 1️⃣ Switch to nftables backend (works in modern environments)
+sudo update-alternatives --set iptables /usr/sbin/iptables-nft
+sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-nft
+
+# 2️⃣ Reset and reapply firewall configuration
+sudo ufw --force reset
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+echo "y" | sudo ufw enable
+
 # Enable the firewall (auto confirm "y")
 echo "y" | ufw enable
 
