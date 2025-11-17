@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Fix Nginx so it runs and listens on port 80
+
+service nginx start

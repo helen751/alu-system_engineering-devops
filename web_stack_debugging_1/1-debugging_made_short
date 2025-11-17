@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Short fix: start nginx manually on port 80
+
+rm -f /var/run/nginx.pid
+nginx -g 'daemon off;' &
