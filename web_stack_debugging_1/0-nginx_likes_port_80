@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# Fix Nginx so that it is running and listening on port 80
+# Fix Nginx so that it runs and listens on port 80
 
 apt-get update -y
-apt-get install -y nginx
+apt-get install -y nginx psmisc
+fuser -k 80/tcp || true
 rm -f /var/run/nginx.pid
 service nginx start
