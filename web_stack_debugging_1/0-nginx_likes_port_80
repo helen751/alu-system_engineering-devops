@@ -5,3 +5,4 @@ apt-get update -y
 apt-get install -y nginx
 rm -f /var/run/nginx.pid
 nginx -g 'daemon off;' &
+sleep 3
