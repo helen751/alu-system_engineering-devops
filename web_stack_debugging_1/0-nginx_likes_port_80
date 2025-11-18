@@ -2,6 +2,7 @@
 # Fix Nginx so it runs and listens on port 80
 
 apt-get update -y
-apt-get install -y nginx
-fuser -k 80/tcp || true
+apt-get install -y nginx psmisc
+pkill -f nginx || true
 nginx
+sleep 5
