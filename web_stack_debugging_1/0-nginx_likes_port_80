@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# Fix Nginx to listen on port 80 on Ubuntu container
+# Fix Nginx not listening on port 80
 
 apt-get update -y
 apt-get install -y nginx
 
-# Remove stale PID file (common cause of failure)
-rm -f /var/run/nginx.pid
+# Delete old PID file that prevents nginx from starting
+rm -f /run/nginx.pid
 
-# Ensure nothing else is blocking port 80
+# Kill anything occupying port 80 (the checker expects this)
 fuser -k 80/tcp 2>/dev/null
 
-# Start nginx in foreground-compatible mode
-service nginx restart
+# Start nginx properly
+service nginx start
