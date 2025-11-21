@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
-# Fixes Nginx so that it runs and listens on port 80
+# Fix Nginx so it listens on port 80
 
 apt-get update -y
 apt-get install -y nginx
-pkill -f nginx || true
+
+# Kill ONLY real nginx workers & master
+for pid in $(ps aux | grep "nginx: " | grep -v "grep" | awk '{print $2}'); do
+    kill -9 "$pid"
+done
+
 rm -f /var/run/nginx.pid
 service nginx start
