@@ -4,10 +4,9 @@
 apt-get update -y
 apt-get install -y nginx
 
-# Kill ONLY real nginx workers & master
-for pid in $(ps aux | grep "nginx: " | grep -v "grep" | awk '{print $2}'); do
-    kill -9 "$pid"
-done
+# Kill only nginx worker and master processes (Shellcheck-safe)
+pgrep -f "nginx: master process" | xargs -r kill -9
+pgrep -f "nginx: worker process" | xargs -r kill -9
 
 rm -f /var/run/nginx.pid
 service nginx start
