@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 # Run the whoami command as another user
-sudo -u "$1" whoami
+new_user="$1"
+adduser --gecos "" --disabled-password --quiet "$new_user"
+# Use the sudo -u command to execute a command as another user
+sudo -u "$new_user" whoami
